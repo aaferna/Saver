@@ -6,14 +6,7 @@
 </div>
 <br><br>
 
-# Instalacion de Saver
 
-Descargar el directorio Instalables. Dentro de la carpeta mediante una termial y con permisos de ROOT, ejecute el siguiente comando:
-
-- `chmod a+x Install.sh && ./Install.sh`
-
- ! Tenga presente que esta pensado para que sea instalado en /home/tac-user, si el usuario es otro, modifique el mismo desde Install.sh antes de realizar la instalacion.
- 
 
 ## Funcionamiento
 
