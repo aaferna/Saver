@@ -23,8 +23,3 @@ El mecanismo interno controla el movimiento del mouse por coordenadas, en el mom
 
 Modificar config.json segun corresponda
 
-## Devs
-  
-  Desarrollado por Retail Financiero Arg. 
-
-  - Agustin Fernandez
