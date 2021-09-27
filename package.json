@@ -1,0 +1,14 @@
+{
+  "name": "saver",
+  "version": "1.0.0",
+  "description": "Protector de pantalla",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . "
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^15.0.0"
+  }
+}
