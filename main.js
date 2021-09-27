@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen } = require('electron')
+const { app, BrowserWindow, screen, webContents } = require('electron')
 const properties = require(__dirname + "/config.json")
 
 let latestUbication = {}
@@ -14,6 +14,23 @@ function createWindow () {
   })
 
   mainWindow.loadURL(properties.url)
+  
+//   let wc = mainWindow.webContents
+
+//   wc.on('cursor-changed', (e, type) =>{ 
+//     console.log(type)
+//       if(activador){ 
+//           clearTimeout(activador) 
+//           activador = ""
+//       } 
+//       if(mainWindow){
+//           mainWindow.close()
+//           mainWindow = ""
+//       }
+//       latestUbication = {x: 0, y: 0}
+
+//   })
+
 }
 
 app.whenReady().then(() => {
@@ -23,6 +40,7 @@ app.whenReady().then(() => {
             createWindow() 
         }, properties.timer)
     }
+
 
     setInterval(() =>{ 
 
