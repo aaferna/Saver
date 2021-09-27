@@ -4,11 +4,16 @@
   "description": "Protector de pantalla",
   "main": "main.js",
   "scripts": {
-    "start": "electron . "
+    "start": "electron . ",
+    "bw": "electron-builder -w zip "
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "electron": "^15.0.0"
+    "electron": "^15.0.0",
+    "electron-builder": "^22.11.7"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
   }
 }

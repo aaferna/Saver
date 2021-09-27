@@ -1,10 +1,12 @@
-const { app, BrowserWindow, screen, webContents } = require('electron')
-const properties = require(__dirname + "/config.json")
+const { app, BrowserWindow, screen, Tray } = require('electron')
+const path = require('path');
+let deployPath = path.dirname(process.execPath);
+const properties = require(path.join(deployPath + "/config.json"))
+// const properties = require( "./config.json")
 
 let latestUbication = {}
 let actualUbication = {}
-let activador
-let mainWindow
+let mainWindow, tray, activador
 
 function createWindow () {
 
@@ -34,6 +36,9 @@ function createWindow () {
 }
 
 app.whenReady().then(() => {
+
+    tray = new Tray('trayTemplate@2x.png')
+    tray.setToolTip('Saver')
 
     const Tempo = () => {
         activador = setTimeout(()=> { 
