@@ -1,12 +1,15 @@
 {
   "name": "saver",
-  "version": "1.0.0",
+  "version": "2.0.11",
   "description": "Protector de pantalla",
   "main": "main.js",
   "scripts": {
-    "start": "electron . ",
-    "bw": "electron-builder -w",
-    "bl": "electron-builder -l"
+    "start": "electron . dev",
+    "patch": "npm version patch",
+    "major": "npm version major",
+    "minor": "npm version minor",
+    "build-win": "electron-builder -w",
+    "build-lin": "electron-builder -l"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -20,15 +23,19 @@
   "build": {
     "productName": "Saver",
     "appId": "com.gusgeek.saver",
-    "win": {
-        "target": ["portable"]
-    },
     "linux": {
-      "target": ["AppImage"]
+      "target": [
+        {
+          "target": "AppImage"
+        }
+      ]
     },
-    "portable": {
-        "artifactName": "saver_portable.exe"
+    "win": {
+      "target": [
+        {
+          "target": "portable"
+        }
+      ]
     }
-
   }
 }

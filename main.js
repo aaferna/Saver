@@ -1,81 +1,77 @@
-const { app, BrowserWindow, screen, Tray } = require('electron')
 const path = require('path');
-let deployPath = path.dirname(process.execPath);
-const properties = require(path.join(deployPath + "/config.json"))
-// const properties = require( "./config.json")
+const fs = require('fs');
+const process = require('process'); 
+const { app, BrowserWindow, screen, Tray, Menu } = require('electron')
 
-let latestUbication = {}
-let actualUbication = {}
-let mainWindow, tray, activador
+let args
 
-function createWindow () {
-
-  mainWindow = new BrowserWindow({
-    width: properties.w,
-    height: properties.h
-  })
-
-  mainWindow.loadURL(properties.url)
-  
-//   let wc = mainWindow.webContents
-
-//   wc.on('cursor-changed', (e, type) =>{ 
-//     console.log(type)
-//       if(activador){ 
-//           clearTimeout(activador) 
-//           activador = ""
-//       } 
-//       if(mainWindow){
-//           mainWindow.close()
-//           mainWindow = ""
-//       }
-//       latestUbication = {x: 0, y: 0}
-
-//   })
-
-}
-
-app.whenReady().then(() => {
-
-    tray = new Tray('trayTemplate@2x.png')
-    tray.setToolTip('Saver')
-
-    const Tempo = () => {
-        activador = setTimeout(()=> { 
-            createWindow() 
-        }, properties.timer)
+    if(process.argv.slice(1)[1] === "dev"){
+        args = "./config.json"
+    } else {
+        args = process.argv.slice(1)[0]
     }
 
 
-    setInterval(() =>{ 
+    try {
 
-        actualUbication = screen.getCursorScreenPoint()
+        const properties = require(args)
 
-        if((actualUbication.x === latestUbication.x) || (actualUbication.y === latestUbication.y)){
+        Menu.setApplicationMenu(false)
+        let latestUbication = {}
+        let actualUbication = {}
+        let mainWindow, tray, activador
 
-            if(!activador){  Tempo()  }
+        function createWindow () {
 
-        } else if(actualUbication.x !== latestUbication.x || actualUbication.y !== latestUbication.y){
-            
-            if(activador){ 
-                clearTimeout(activador) 
-                activador = ""
-            } 
+            mainWindow = new BrowserWindow({
+                width: properties.w,
+                height: properties.h,
+                frame: false,
+                fullscreen: true
+            })
 
-            if(mainWindow){
-                mainWindow.close()
-                mainWindow = ""
+            mainWindow.loadURL(properties.url)
+        
+        }
+        
+
+        app.whenReady().then(() => {
+
+            const Tempo = () => {
+                activador = setTimeout(()=> { 
+                    createWindow() 
+                }, properties.timer)
             }
 
-            latestUbication = actualUbication
+            setInterval(() =>{ 
 
-        } 
-       
-    }, 100)
-    
+                actualUbication = screen.getCursorScreenPoint()
 
-})
+                if((actualUbication.x === latestUbication.x) || (actualUbication.y === latestUbication.y)){
+                    if(!activador){  Tempo()  }
+                } else if(actualUbication.x !== latestUbication.x || actualUbication.y !== latestUbication.y){
+                    if(activador){ 
+                        clearTimeout(activador) 
+                        activador = ""
+                    } 
+                    if(mainWindow){
+                        mainWindow.close()
+                        mainWindow = ""
+                    }
+                    latestUbication = actualUbication
+                } 
+            
+            }, 100)
 
-app.on('before-quit', (e) => {
-    e.preventDefault()
-})
+            app.on('before-quit', (e) => {
+                e.preventDefault()
+            })
+
+        })
+
+    } catch(e) {
+        console.log("[ ERROR ] --- Existe un inconveniente")
+        console.log(e)
+        app.quit()
+    }
+
