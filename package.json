@@ -8,6 +8,7 @@
     "patch": "npm version patch",
     "major": "npm version major",
     "minor": "npm version minor",
+    "build": "electron-builder -wlm",
     "build-win": "electron-builder -w",
     "build-lin": "electron-builder -l"
   },
@@ -21,21 +22,7 @@
     "path": "^0.12.7"
   },
   "build": {
-    "productName": "Saver",
-    "appId": "com.gusgeek.saver",
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage"
-        }
-      ]
-    },
-    "win": {
-      "target": [
-        {
-          "target": "portable"
-        }
-      ]
-    }
+    "productName": "Healty Center",
+    "appId": "com.gusgeek.healtycenter"
   }
 }

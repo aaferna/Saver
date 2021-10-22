@@ -1,0 +1,183 @@
+
+
+<script>
+
+    const validateStatus = (url, id) => {
+        setInterval(()=>{
+
+            $.ajax({
+                "url": url,
+                "method": "GET"
+            }).done(function (response) {
+                if(response.handle == "hi!"){
+                    $("#"+id).css('color', 'green');
+                } 
+            }).fail(function() {
+                $("#"+id).css('color', 'red');
+            })
+
+        }, 5000)
+    }
+
+    const to = (id) => {
+        window.open("./index.html#machine/"+id);
+    }
+
+    const save = () => {
+
+
+        const insert = (data, colect) => {
+
+            if(!localStorage.getItem(colect)){
+                let d = []
+                d.push(data)
+                localStorage.setItem(colect, JSON.stringify(d));
+                return true
+            } else {
+                let dataforPush = JSON.parse(localStorage.getItem(colect));
+                dataforPush.push(data);
+                localStorage.setItem(colect, JSON.stringify(dataforPush));
+                return true
+            }
+
+        }
+
+        insert({
+            nombre: $("#name").val(),
+            ip: $("#ip").val()
+        }, "Equipos")
+
+            $("#name").text("")
+            $("#ip").text("")
+
+            $('#exampleModal').modal('toggle');
+            location.reload();
+
+    }
+
+    const updb = () => {
+
+        uploadObjectAsJson($("#jsonDB").val())
+        $('#exampleModalUpload').modal('toggle');
+        location.reload();
+
+    }
+
+    let devices = get("Equipos")
+    if(devices){
+        $("#dnldsd").css("display","block")
+        for (let i = 0; i < devices.length; i++) {
+
+            validateStatus(devices[i].ip, "d"+i)
+
+            $("#divActivity").append(`
+
+                    <div class="col-md-4">
+                        <div class="card" >
+                            <div class="card-body">
+                                <center><h5 class="card-title">${devices[i].nombre}</h5></center>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 ">
+                                        <span id="d${i}" >●</span>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 text-end">
+                                        <i class="fa fa-eye " aria-hidden="true" onclick="to(${i})"></i>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+            `)
+
+        }
+
+    }
+</script>
+
+
+<div class="col-lg-8 mx-auto p-3 py-md-5">
+
+    <header class="d-flex align-items-center pb-3 mb-5"> 
+        <a href="https://gusgeek.github.io/HealtyCenter/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Healty Center</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="row g-5">
+            <div class="col-sm-9">
+            <h3>Equipos Registrados</h3>
+            </div>
+            <div class="col-sm-3">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button data-bs-toggle="modal" data-bs-target="#exampleModalUpload" class="btn btn-success btn-sm ml-auto" ><i class="fa fa-upload" aria-hidden="true"></i></button>
+                    <button id="dnldsd" style="display: none;" class="btn btn-success btn-sm ml-auto" onclick="downloadObjectAsJson(devices)"><i class="fa fa-download" aria-hidden="true"></i></button>
+                    <button data-bs-toggle="modal"  data-bs-target="#exampleModal" class="btn btn-success btn-sm ml-auto"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="col-3 col-md-2 mb-5" />
+        <div class="row g-5" id="divActivity">
+        </div>
+    </main>
+       
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Nuevo Equipo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form onsubmit="return false">
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre del Equipo</label>
+                        <input type="text" class="form-control" id="name" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ip" class="form-label">URL de Healty Deamon</label>
+                        <input type="text" class="form-control" id="ip" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary" onclick="save()">Guardar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalUpload" tabindex="-1" aria-labelledby="exampleModalUpload" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalUpload">Cargar Database</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form onsubmit="return false">
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ip" class="form-label">Pegue aquí el JSON</label>
+                        <textarea type="text" class="form-control" id="jsonDB"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary" onclick="updb()">Guardar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
